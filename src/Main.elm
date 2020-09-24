@@ -4,9 +4,12 @@ import Html exposing (div, h1, h2, li, text, ul)
 import Html.Attributes exposing (class, id)
 
 pluralize singular plural amount =
+    let amountStr = String.fromInt amount
+        prefix = amountStr ++ " : "
+    in
     if amount == 1 then
-       singular
-     else plural
+       prefix ++ singular
+     else prefix ++ plural
 
 languages = ul [class "langs" ]
     [ li [] [ text "js"]
@@ -22,4 +25,4 @@ result = div []
      , banner
     ]
 
-main = result
+main = h1 [] [text (pluralize "leaf" "leaves" 1)]
