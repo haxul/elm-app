@@ -1,4 +1,4 @@
-module Main exposing (..)
+module Main exposing (main)
 
 import Browser
 import Html exposing (Html, button, div, p, text)
@@ -8,12 +8,10 @@ import Article
 
 -- MAIN
 
-
 main =
   Browser.sandbox { init = init, update = update, view = view }
 
 -- MODEL
-
 
 type alias Model =
     { selectedTag : String
@@ -30,7 +28,7 @@ init =
 
 -- UPDATE
 
-type Operation = SelectTag
+type Operation = SelectTag | Clear
 
 type alias Msg =
     { operation : Operation
@@ -41,15 +39,16 @@ update msg model =
   case msg.operation of
     SelectTag ->
       { model | selectedTag = msg.data }
+    Clear -> { model | selectedTag = "" }
 
 
 
 -- VIEW
 
 view model =
-  let viewButton buttonName  =
-        button [class (isSelected buttonName) , onClick {operation = SelectTag, data = buttonName}] [text buttonName]
+  let viewButton b = button [class (isSelected b) , onClick (handleClick b)] [text b]
       isSelected b = if b == model.selectedTag then "selected" else ""
+      handleClick b = {operation = (if b /= "clear" then SelectTag else Clear ), data = b}
       viewText t = div []
             [p [] [text ("title: " ++ t.title)]
             , p [] [text ("desc: " ++ t.description)]

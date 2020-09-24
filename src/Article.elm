@@ -1,5 +1,5 @@
 
-module  Article exposing (feed, tags, Model, Article)
+module  Article exposing (feed, tags, Article)
 
 
 tags =
@@ -8,6 +8,7 @@ tags =
     , "javascript"
     , "typescript"
     , "gwt"
+    , "clear"
     ]
 
 
@@ -24,12 +25,3 @@ type alias Article = {
     title : String,
     description: String
     }
-
-type alias Model =
-  { tags : List String
-  , selectedTag : String
-  , allArticles : {
-    title : String
-    , description : String
-  }
-  }
