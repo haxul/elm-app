@@ -1,7 +1,8 @@
 module Main exposing (main)
 
-import Html exposing (div, h1, h2, li, text, ul)
+import Html exposing (Html, div, h1, h2, li, text, ul)
 import Html.Attributes exposing (class, id)
+import List exposing (map)
 
 pluralize singular plural amount =
     let amountStr = String.fromInt amount
@@ -16,6 +17,8 @@ languages = ul [class "langs" ]
      ,li [] [ text "ts" ]
      ,li [] [ text  "elm" ]
     ]
+
+
 banner = h2 [class "banner"] [text "nice banner"]
 
 result = div []
@@ -25,4 +28,11 @@ result = div []
      , banner
     ]
 
-main = h1 [] [text (pluralize "leaf" "leaves" 1)]
+
+backend = ["java", "kotlin", "haskel"]
+
+renderLi : List String -> Html msg
+renderLi lst = ul [] (List.map (\x -> li [class "pretty"] [text x]) lst)
+
+main = renderLi backend
+
