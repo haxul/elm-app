@@ -1,9 +1,10 @@
 module Main exposing (main)
 
-import Html exposing (Html, div, h1, h2, li, text, ul)
-import Html.Attributes exposing (class, id)
-import List exposing (map)
+import Html exposing (Html, button, div, text)
+import Html.Attributes exposing (class)
+import List
 
+pluralize : String -> String -> Int -> String
 pluralize singular plural amount =
     let amountStr = String.fromInt amount
         prefix = amountStr ++ " : "
@@ -12,27 +13,10 @@ pluralize singular plural amount =
        prefix ++ singular
      else prefix ++ plural
 
-languages = ul [class "langs" ]
-    [ li [] [ text "js"]
-     ,li [] [ text "ts" ]
-     ,li [] [ text  "elm" ]
-    ]
-
-
-banner = h2 [class "banner"] [text "nice banner"]
-
-result = div []
-    [
-     h1 [id "header"] [ text "Application"]
-     , languages
-     , banner
-    ]
-
-
+tag t = button [class "btn btn-outline-secondary mx-2"] [text t]
 backend = ["java", "kotlin", "haskel"]
 
-renderLi : List String -> Html msg
-renderLi lst = ul [] (List.map (\x -> li [class "pretty"] [text x]) lst)
+renderTags : List String -> Html msg
+renderTags lst = div [class "container"] (List.map tag lst)
 
-main = renderLi backend
-
+main = text ""
