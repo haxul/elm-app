@@ -32,9 +32,10 @@ type Operation = SelectTag | Clear
 
 type alias Msg =
     { operation : Operation
-      ,data : Int
+      ,data : String
     }
 
+update : Msg -> Model -> Model
 update msg model =
   case msg.operation of
     SelectTag ->
@@ -42,9 +43,8 @@ update msg model =
     Clear -> { model | selectedTag = "" }
 
 
-
 -- VIEW
-
+view : Model -> Html Msg
 view model =
   let viewButton b = button [class (isSelected b) , onClick (handleClick b)] [text b]
       isSelected b = if b == model.selectedTag then "selected" else ""
