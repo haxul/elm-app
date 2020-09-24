@@ -1,22 +1,61 @@
-module Main exposing (main)
+module Main exposing (..)
 
-import Html exposing (Html, button, div, text)
+import Browser
+import Html exposing (Html, button, div, p, text)
 import Html.Attributes exposing (class)
-import List
+import Html.Events exposing (onClick)
+import Article
 
-pluralize : String -> String -> Int -> String
-pluralize singular plural amount =
-    let amountStr = String.fromInt amount
-        prefix = amountStr ++ " : "
-    in
-    if amount == 1 then
-       prefix ++ singular
-     else prefix ++ plural
+-- MAIN
 
-tag t = button [class "btn btn-outline-secondary mx-2"] [text t]
-backend = ["java", "kotlin", "haskel"]
 
-renderTags : List String -> Html msg
-renderTags lst = div [class "container"] (List.map tag lst)
+main =
+  Browser.sandbox { init = init, update = update, view = view }
 
-main = text ""
+-- MODEL
+
+
+type alias Model =
+    { selectedTag : String
+      , buttons: List String
+      , articles : List Article.Article
+    }
+
+init : Model
+init =
+    {selectedTag = "elm"
+     ,buttons = Article.tags
+     ,articles = Article.feed
+    }
+
+-- UPDATE
+
+type Operation = SelectTag
+
+type alias Msg =
+    { operation : Operation
+      ,data : Int
+    }
+
+update msg model =
+  case msg.operation of
+    SelectTag ->
+      { model | selectedTag = msg.data }
+
+
+
+-- VIEW
+
+view model =
+  let viewButton buttonName  =
+        button [class (isSelected buttonName) , onClick {operation = SelectTag, data = buttonName}] [text buttonName]
+      isSelected b = if b == model.selectedTag then "selected" else ""
+      viewText t = div []
+            [p [] [text ("title: " ++ t.title)]
+            , p [] [text ("desc: " ++ t.description)]
+            ]
+  in
+  div []
+    [ div []  (List.map viewButton model.buttons )
+      , div [] (List.map viewText  (List.filter (\article -> article.description == model.selectedTag) model.articles))
+    ]
