@@ -1,4 +1,4 @@
-module Main exposing (main)
+module ViewModule.Main exposing (main)
 
 import Browser
 import Html exposing (Html, button, div, p, text)
