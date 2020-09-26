@@ -70,7 +70,7 @@ view model =
                , page
                ]
         ]
-
+main : Program () Model Msg
 main = Browser.sandbox
     { init = initModel
     , update = update
