@@ -1,4 +1,4 @@
-module Joke exposing (..)
+port module Joke exposing (..)
 
 
 import Browser
@@ -33,19 +33,23 @@ type Model
 
 
 
+
 init : () -> (Model, Cmd Msg)
 init _ =
   ( Start
   , Cmd.none
   )
 
+-- ports
+
+port logString : String -> Cmd msg
 
 
 -- UPDATE
 
 
 type Msg
-  = GotText (Result Http.Error JokeResponse) | Load
+  = GotText (Result Http.Error JokeResponse) | Load | Console String
 
 
 update : Msg -> Model -> (Model, Cmd Msg)
@@ -59,6 +63,7 @@ update msg model =
         Err error ->
           (Failure error, Cmd.none)
     Load -> (Loading , loadJoke)
+    Console text-> (Start ,logString <| text )
 
 
 -- SUBSCRIPTIONS
@@ -75,7 +80,11 @@ subscriptions model = Sub.none
 view : Model -> Html Msg
 view model =
   case model of
-    Start -> div [] [button [onClick Load] [text "fetch joke"] ]
+    Start -> div []
+                [
+                  button [onClick Load] [text "fetch joke"]
+                  , button [onClick (Console  "hello world")] [text ("console log")]
+                ]
     Failure err ->
       text ("Some gets wrong : " ++ errorToString err)
 
@@ -85,6 +94,7 @@ view model =
     Success joke ->
       div []
           [ button [onClick Load] [text  "fetch joke"]
+           ,button [onClick (Console  "hello world")] [text ("console log")]
           , p [] [ text joke.joke ]
           ]
 
